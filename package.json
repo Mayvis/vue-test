@@ -16,6 +16,7 @@
     "jsdom-global": "^3.0.2",
     "mocha": "^4.0.1",
     "mocha-webpack": "^1.1.0",
+    "vue-loader": "^15.6.4",
     "vue-template-compiler": "^2.6.6",
     "webpack": "^3.7.1"
   },

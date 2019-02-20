@@ -1,3 +1,5 @@
-require('jsdom-global')()
+require('jsdom-global')();
 
-global.expect = require('expect')
+window.Date = Date;
+
+global.expect = require('expect');

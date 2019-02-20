@@ -1,7 +1,7 @@
 import {
     mount
 } from '@vue/test-utils';
-import Counter from '../src/components/Counter';
+import Counter from '../src/components/Counter.vue';
 
 describe('Counter', () => {
     let wrapper;
