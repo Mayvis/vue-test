@@ -2,14 +2,14 @@ import {
     mount
 } from '@vue/test-utils';
 import Question from '../src/components/Question.vue';
-import {
-    type
-} from 'os';
+import moxios from 'moxios';
 
 describe('Question', () => {
     let wrapper;
 
     beforeEach(() => {
+        moxios.install();
+
         wrapper = mount(Question, {
             propsData: {
                 dataQuestion: {
@@ -18,6 +18,10 @@ describe('Question', () => {
                 }
             }
         });
+    });
+
+    afterEach(() => {
+        moxios.uninstall();
     });
 
     it('presents the body and title', () => {
@@ -41,7 +45,7 @@ describe('Question', () => {
         expect(wrapper.contains('#edit')).toBe(false);
     });
 
-    it('updates the question after being edited', () => {
+    it('updates the question after being edited', (done) => {
         click('#edit');
 
         type('input[name=title]', 'Changed title');
@@ -49,8 +53,22 @@ describe('Question', () => {
 
         click('#update');
 
+        moxios.stubRequest(/questions\/\d+/, {
+            status: 200,
+            responseText: {
+                title: 'Changed title',
+                body: 'Changed body',
+            }
+        });
+
         see('Changed title');
         see('Changed body');
+
+        moxios.wait(() => {
+            see('Your question has been updated');
+
+            done();
+        });
     });
 
     it('can cancel out of edit mode', () => {
