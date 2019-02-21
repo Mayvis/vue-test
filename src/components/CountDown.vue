@@ -23,7 +23,8 @@ export default {
 
   data() {
     return {
-      now: new Date()
+      now: new Date(),
+      interval: null
     };
   },
 
@@ -35,7 +36,7 @@ export default {
         this.$emit("finished");
       }
 
-        return remaining;
+      return remaining;
     },
 
     finished() {
@@ -44,13 +45,17 @@ export default {
   },
 
   created() {
-    let interval = setInterval(() => {
+    this.interval = setInterval(() => {
       this.now = new Date();
     }, 1000);
 
     this.$on("finished", () => {
-      clearInterval(interval);
+      clearInterval(this.interval);
     });
+  },
+
+  destroyed() {
+    clearInterval(this.interval);
   }
 };
 </script>

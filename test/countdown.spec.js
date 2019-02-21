@@ -31,54 +31,54 @@ describe('CountDown', () => {
         see('10 Seconds');
     });
 
-    it('reduces the countdown every seconds', (done) => {
+    it('reduces the countdown every seconds', async () => {
         see('10 Seconds');
 
         clock.tick(1000);
 
-        assertOnNextTick(() => {
-            see('9 Seconds');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('9 Seconds');
     });
 
-    it('shows an expired message when the countdown has completed', (done) => {
+    it('shows an expired message when the countdown has completed', async () => {
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            see('Now expired');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('Now expired');
     });
 
-    it('shows an customized message when the countdown has completed', (done) => {
+    it('shows an customized message when the countdown has completed', async () => {
         wrapper.setProps({
             expiredText: "Contest is over"
         });
 
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            see('Contest is over');
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        see('Contest is over');
     });
 
-    it('broadcasts when the countdown is finished', (done) => {
+    it('broadcasts when the countdown is finished', async () => {
         clock.tick(10000);
 
-        assertOnNextTick(() => {
-            expect(wrapper.emitted().finished).toBeTruthy();
-        }, done);
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.emitted().finished).toBeTruthy();
     });
 
-    it('clears the interval once completed', (done) => {
+    it('clears the interval once completed', async () => {
         clock.tick(10000);
 
         expect(wrapper.vm.now.getSeconds()).toBe(10);
 
-        assertOnNextTick(() => {
-            clock.tick(5000);
+        await wrapper.vm.$nextTick();
 
-            expect(wrapper.emitted().finished).toBeTruthy();
-        }, done);
+        clock.tick(5000);
+
+        expect(wrapper.emitted().finished).toBeTruthy();
     });
 
     let see = (text, selector) => {
@@ -96,17 +96,5 @@ describe('CountDown', () => {
 
     let click = (selector) => {
         wrapper.find(selector).trigger('click');
-    }
-
-    let assertOnNextTick = (callback, done) => {
-        wrapper.vm.$nextTick(() => {
-            try {
-                callback();
-
-                done();
-            } catch (e) {
-                done(e)
-            }
-        });
     }
 })
